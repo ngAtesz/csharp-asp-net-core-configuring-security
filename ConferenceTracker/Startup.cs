@@ -2,13 +2,12 @@ using ConferenceTracker.Data;
 using ConferenceTracker.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
+using Microsoft.Extensions.Logging;
 
 namespace ConferenceTracker
 {
@@ -46,7 +45,9 @@ namespace ConferenceTracker
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app,
+                            IWebHostEnvironment env,
+                            ILogger<Startup> logger)
         {
             if (!env.IsDevelopment())
             {
@@ -57,6 +58,7 @@ namespace ConferenceTracker
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+                logger.LogInformation("Environment is in development");
             }
 
             using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
