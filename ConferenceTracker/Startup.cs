@@ -50,6 +50,10 @@ namespace ConferenceTracker
                     builder.WithOrigins("http://www.pluralsight.com");
                 });
             });
+
+            // dotnet user-secrets init
+            // dotnet user-secrets set "key" "value"
+            SecretMessage = Configuration["SecretMessage"];
         }
 
 
