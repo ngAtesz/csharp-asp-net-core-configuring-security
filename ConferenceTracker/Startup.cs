@@ -49,16 +49,17 @@ namespace ConferenceTracker
                             IWebHostEnvironment env,
                             ILogger<Startup> logger)
         {
-            if (!env.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
-            }
-            else
+            //TODO: send feedback about strict if condition order causing failing test
+            if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
                 logger.LogInformation("Environment is in development");
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
 
             using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
