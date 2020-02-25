@@ -14,6 +14,8 @@ namespace ConferenceTracker
 {
     public class Startup
     {
+        private readonly string _allowedOrigins = "_allowedOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -33,6 +35,13 @@ namespace ConferenceTracker
             services.AddRazorPages();
             services.AddTransient<IPresentationRepository, PresentationRepository>();
             services.AddTransient<ISpeakerRepository, SpeakerRepository>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(_allowedOrigins, builder => {
+                    builder.WithOrigins("http://www.pluralsight.com");
+                });
+            });
         }
 
 
@@ -53,6 +62,8 @@ namespace ConferenceTracker
             using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             using (var context = scope.ServiceProvider.GetService<ApplicationDbContext>())
                 context.Database.EnsureCreated();
+
+            app.UseCors(_allowedOrigins);
 
             app.UseHttpsRedirection();
 
